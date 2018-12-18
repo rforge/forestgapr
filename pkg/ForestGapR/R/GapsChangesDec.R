@@ -1,6 +1,6 @@
 #'Forest Gaps Changes Detection
 #'
-#'@description This function detects forest canopy gaps changes accross two forest gaps RasterLayer (\code{\link[raster]{raster}}) objects
+#'@description This function detects forest canopy gap changes across two forest gap RasterLayer (\code{\link[raster]{raster}}) objects
 #'
 #'@usage GapChangeDec(gap_layer1,gap_layer2)
 #'
@@ -21,7 +21,7 @@
 #'
 #'# set height tresholds (e.g. 10 meters)
 #'threshold<-10
-#'size<-c(1,1000) # m2
+#'size<-c(1,10^4) # m2
 #'
 #'# Detecting forest gaps
 #'gaps_cau2012<-getForestGaps(chm_layer=ALS_CHM_CAU_2012, threshold=threshold, size=size)
