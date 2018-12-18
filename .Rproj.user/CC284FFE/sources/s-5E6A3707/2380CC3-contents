@@ -1,0 +1,166 @@
+#=======================================================================#
+# Importing ALS-derived Canopy Height Model (CHM)
+#=======================================================================#
+#Loading raster library
+library(raster)
+library(viridis)
+library(ForestGapR)
+# ALS-derived CHM over Adolpho Ducke Forest Reserve - Brazilian tropical forest
+data(ALS_CHM_CAU_2012)
+
+windows()
+
+tiff("C:\\00_MANUSCRIPTS\\00_GapForestR\\07_figures\\wiki\\Fig2.tif", 
+     width = 8.2, height = 8, units = 'in', res = 300)
+
+# Plotting chm
+plot(ALS_CHM_DUC, col=viridis(10), main= "ALS CHM")
+
+#=======================================================================#
+# Example 1: Forest Gap detection using a fixed canopy height thresholds
+#=======================================================================#
+
+# set height tresholds (e.g. 10 meters)
+threshold<-10
+size<-c(1,1000) # m2
+
+# Detecting forest gaps
+gaps_duc<-getForestGaps(chm_layer=ALS_CHM_DUC, threshold=threshold, size=size)
+
+# Ploting gaps
+plot(gaps_duc, col="red", add=TRUE, main="Forest Canopy Gap", legend=FALSE)
+grid()
+dev.off()
+#=======================================================================#
+# Example 2: Gap detection using multiple canopy height thresholds
+#=======================================================================#
+
+# set the height tresholds
+nthresholds<-c(10,15,20,25)
+size<-c(1,1000) # m2
+
+# creating an empy raster stack to store multplie gaps as RasterLayers
+gaps_stack<-stack()
+
+# Gap detection
+for (i in nthresholds){
+  gaps_i<-getForestGaps(chm_layer=ALS_CHM_DUC, threshold=i, size=size)
+  names(gaps_i)<-paste0("gaps_",i,"m")
+  gaps_stack<-stack(gaps_stack,gaps_i)
+}
+
+# plot gaps
+plot(gaps_stack, col="red", legend=FALSE)
+
+
+
+#Loading raster library
+library(raster)
+
+# ALS-derived CHM over Adolpho Ducke Forest Reserve - Brazilian tropical forest
+data(ALS_CHM_DUC)
+
+# set height tresholds (e.g. 10 meters)
+threshold<-10
+size<-c(5,1000) # m2
+
+# Detecting forest gaps
+gaps_duc<-getForestGaps(chm_layer=ALS_CHM_DUC, threshold=threshold, size=size)
+
+# Computing basic statistis of forest gap
+gaps_stats<-GapStats(gap_layer=gaps_duc, chm_layer=ALS_CHM_DUC)
+gaps_stats
+
+
+#Loading raster library
+library(raster)
+
+windows()
+# ALS-derived CHM over Adolpho Ducke Forest Reserve - Brazilian tropical forest
+data(ALS_CHM_DUC)
+
+# set height tresholds (e.g. 10 meters)
+threshold<-10
+size<-c(1,1000) # m2
+
+tiff("C:\\00_MANUSCRIPTS\\00_GapForestR\\07_figures\\wiki\\Fig3.tif", 
+     width = 5.2, height = 5, units = 'in', res = 300)
+
+# Detecting forest gaps
+gaps_duc<-getForestGaps(chm_layer=ALS_CHM_DUC, threshold=threshold, size=size)
+
+# Computing basic statistis of forest gap
+gaps_stats<-GapStats(gap_layer=gaps_duc, chm_layer=ALS_CHM_DUC)
+
+# Gap-size Frequency Distributions
+GapSizeFDist(gaps_stats=gaps_stats, col="forestgreen", pch=16, cex=1, main="Forest Canopy Gap-size Frequency Distributions",
+             axes=FALSE,ylab="Gap Frequency",xlab=as.expression(bquote("Gap Size" ~ (m^2) )))
+axis(1);axis(2)
+grid(4,4)
+dev.off()
+
+
+#Loading raster and viridis libraries
+library(raster)
+library(viridis)
+
+# ALS-derived CHM from Fazenda Cauxi - Brazilian tropical forest
+data(ALS_CHM_CAU_2012)
+data(ALS_CHM_CAU_2014)
+
+# set height tresholds (e.g. 10 meters)
+threshold<-10
+size<-c(1,1000) # m2
+
+# Detecting forest gaps
+gaps_cau2012<-getForestGaps(chm_layer=ALS_CHM_CAU_2012, threshold=threshold, size=size)
+gaps_cau2014<-getForestGaps(chm_layer=ALS_CHM_CAU_2014, threshold=threshold, size=size)
+
+# Detecting forest gaps changes
+Gap_changes<-GapChangeDec(gap_layer1=gaps_cau2012,gap_layer2=gaps_cau2014)
+
+tiff("C:\\00_MANUSCRIPTS\\00_GapForestR\\07_figures\\wiki\\Fig4.tif", 
+     width = 10, height = 3.6, units = 'in', res = 300)
+
+# Plotting ALS-derived CHM and forest gaps
+par(mfrow=c(1,3))
+plot(ALS_CHM_CAU_2012, main="Forest Canopy Gap - 2012", col=viridis(10))
+plot(gaps_cau2012, add=TRUE, col="red", legend=FALSE)
+
+plot(ALS_CHM_CAU_2014,  main="Forest Canopy Gap - 2014", col=viridis(10))
+plot(gaps_cau2014, add=TRUE,col="red", legend=FALSE)
+
+plot(ALS_CHM_CAU_2014,main="Forest Gap Changes Detected",col=viridis(10))
+plot(Gap_changes, add=TRUE, col="orange", legend=FALSE)
+dev.off()
+
+
+
+#Loading raster and viridis libraries
+library(raster)
+library(viridis)
+
+# ALS-derived CHM over Adolpho Ducke Forest Reserve - Brazilian tropical forest
+data(ALS_CHM_DUC)
+
+# set height tresholds (e.g. 10 meters)
+threshold<-10
+size<-c(5,1000) # m2
+
+# Detecting forest gaps
+gaps_duc<-getForestGaps(chm_layer=ALS_CHM_DUC, threshold=threshold, size=size)
+
+# Converting raster layer to SpatialPolygonsDataFrame
+gaps_spdf<-GapSPDF(gap_layer=gaps_duc)
+
+tiff("C:\\00_MANUSCRIPTS\\00_GapForestR\\07_figures\\wiki\\Fig5.tif", 
+     width = 7.2, height = 7, units = 'in', res = 300)
+# Plotting ALS-derived CHM and forest gaps
+plot(ALS_CHM_DUC, col=viridis(10), xlim=c(173025,173125), ylim=c(9673100,96731200))
+plot(gaps_spdf, add=TRUE, border="red", lwd=2)
+dev.off()
+
+# Populating the attribute table of Gaps_spdf with gaps statistics
+gaps_stats<-GapStats(gap_layer=gaps_duc, chm_layer=ALS_CHM_DUC)
+gaps_spdf<-merge(gaps_spdf,gaps_stats, by="gap_id")
+head(gaps_spdf@data)

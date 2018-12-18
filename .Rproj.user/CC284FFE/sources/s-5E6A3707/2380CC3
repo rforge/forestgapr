@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1545098187552.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "2380CC3",
+    "lastKnownWriteTime" : 1545107370,
+    "last_content_update" : -2147483648,
+    "path" : "C:/00_MANUSCRIPTS/00_GapForestR/04_script/wiki2.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "166,0",
+        "scrollLine" : "135",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
