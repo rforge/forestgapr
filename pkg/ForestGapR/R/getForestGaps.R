@@ -7,7 +7,7 @@
 #'@param chm_layer ALS-derived Canopy Height Model (CHM) RasterLayer (\code{\link[raster:raster]{raster}}) object. An object of the classs RasterLayer.
 #'@param threshold Height threshold for gap detection. Default is 10 m.
 #'@param size A vector containing the minimum and maximum gap size - area (m2).
-#'Gaps with area < size[1] or area > size[2] are not considered. Default is 1 m2 and 100 m2.
+#'Gaps with area < size[1] or area > size[2] are not considered. Default is 1 m2 and 1ha.
 #'@return Forest Gaps. An object of the classs RasterLayer.
 #'@author Carlos Alberto Silva.
 #'@examples
@@ -23,7 +23,7 @@
 #'data(ALS_CHM_DUC)
 #'
 #'# Plotting chm
-#'plot(ALS_CHM_DUC, col=, main= "ALS CHM")
+#'plot(ALS_CHM_DUC, col=viridis(10), main= "ALS CHM")
 #'grid()
 #'#=======================================================================#
 #'# Example 1: Forest Gap detection using a fixed canopy height thresholds
@@ -31,7 +31,7 @@
 #'
 #'# set height tresholds (e.g. 10 meters)
 #'threshold<-10
-#'size<-c(1,1000) # m2
+#'size<-c(1,10^4) # m2
 #'
 #'# Detecting forest gaps
 #'gaps_duc<-getForestGaps(chm_layer=ALS_CHM_DUC, threshold=threshold, size=size)
@@ -45,7 +45,7 @@
 #'
 #'# set the height tresholds
 #'nthresholds<-c(10,15,20,25)
-#'size<-c(1,1000) # m2
+#'size<-c(1,10^4) # m2
 #'
 #'# creating an empy raster stack to store multplie gaps as RasterLayers
 #'gaps_stack<-stack()
