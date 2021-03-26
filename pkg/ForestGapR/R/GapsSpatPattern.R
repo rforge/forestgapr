@@ -1,18 +1,19 @@
 #'Spatial Pattern Analysis of Forest Canopy Gaps
 #'
-#'@description This function computes second order statistics of forest canopy gaps (\code{\link[raster]{raster}}) to
-#'\code{\link[sp]{SpatialPointsDataFrame-class}} objects
 #'
-#'@usage GapsSpatPattern(gap_SPDF_layer,chm_layer) 
+#'@description This function computes second order statistics of forest canopy gaps ([`raster::RasterLayer-class`]) to
+#'[`sp::SpatialPointsDataFrame-class`] objects
 #'
-#'@param gap_SPDF_layer A \code{\link[sp]{SpatialPointsDataFrame-class}} object of the forest canopy gaps. 
-#'Output of (\code{\link[ForestGapR:GapSPDF]{GapSPDF}}) function.
-#'An object of the classs \code{\link[sp]{SpatialPointsDataFrame-class}} 
-#'@param chm_layer ALS-derived Canopy Height Model (CHM) RasterLayer (\code{\link[raster:raster]{raster}}) object. An object of the classs RasterLayer.
+#'
+#'@param gap_SPDF_layer A [`sp::SpatialPointsDataFrame-class`] object of the forest canopy gaps. 
+#'Output of [GapSPDF()] function.
+#'An object of the class [`sp::SpatialPointsDataFrame-class`] 
+#'@param chm_layer ALS-derived Canopy Height Model (CHM) ([`raster::RasterLayer-class`]) object. An object of the class [`raster::RasterLayer-class`].
 #'@return A plot with Ripley's K- and L-functions. Value of Clark-Evans index (R) and test for randomness (R=1), aggregation (R<1) or uniform distribution (R>1).
 #'@author Ruben Valbuena and Carlos Alberto Silva.
-#'@references \emph{spatstat} package,see \code{\link[spatstat]{Kest}},\code{\link[spatstat]{Lest}},
-#'and \code{\link[spatstat]{clarkevans.test}}.
+#'@references 
+#'[`spatstat`][spatstat.core::spatstat.core-package] package, see [`Lest()`][spatstat.core::Lest()], [`Kest()`][spatstat.core::Kest()],
+#'and [`clarkevans.test()`][spatstat.core::clarkevans.test()].
 #'
 #'@examples
 #'\dontrun{
@@ -42,12 +43,12 @@
 #'}
 #'@export
 GapsSpatPattern<-function(gap_SPDF_layer, chm_layer){
-  P  <- spatstat::as.ppp(sp::coordinates(gap_SPDF_layer),raster::extent(chm_layer)[])
-  K <- spatstat::envelope(P, spatstat::Kest, nsim=99, verbose=F)
-  L <- spatstat::envelope(P, spatstat::Lest, nsim=99, verbose=F)
+  P  <- spatstat.geom::as.ppp(sp::coordinates(gap_SPDF_layer),raster::extent(chm_layer)[])
+  K <- spatstat.core::envelope(P, spatstat.core::Kest, nsim=99, verbose=F)
+  L <- spatstat.core::envelope(P, spatstat.core::Lest, nsim=99, verbose=F)
   graphics::par(mfrow=c(1,2), mar=c(6, 5, 4, 2))
   graphics::plot(K); graphics::plot(L) 
-  CE <- spatstat::clarkevans.test(P)
+  CE <- spatstat.core::clarkevans.test(P)
   return(CE)
 }
 
